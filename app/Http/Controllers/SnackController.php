@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Snack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class SnackController extends Controller
 {
@@ -58,11 +59,14 @@ class SnackController extends Controller
 
     public function destroy(Snack $snack)
     {
-        $this->authorize('delete-snack', $snack);
+        if (Gate::allows('admin') || $snack->user_id === auth()->id()) {
+            // Allow admins or the snack's owner to delete the post
+            $snack->delete();
+            return redirect()->route('snacks.index')->with('success', 'Snack deleted successfully');
+        } else {
+            return redirect()->route('snacks.index')->with('error', 'You are not authorized to delete this snack');
+        }
 
-        $snack->delete();
-
-        return redirect()->route('snacks.index')->with('success', 'Snack deleted successfully!');
     }
 
 

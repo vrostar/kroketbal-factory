@@ -8,22 +8,24 @@
         <p>Description: {{ $snack->description }}</p>
         <p>Uploaded By: {{ $snack->user->name }}</p>
 
-        @auth
-            @can('update-snack', $snack)
-                <a href="{{ route('snacks.edit', $snack->id) }}" class="btn btn-primary">Edit Snack</a>
-            @endcan
-        @endauth
+        <div class="mb-4">
+            @auth
+                @can('update-snack', $snack)
+                    <a href="{{ route('snacks.edit', $snack->id) }}" class="btn btn-primary">Edit Snack</a>
+                @endcan
+            @endauth
+        </div>
 
-        @auth
-            @can('delete-snack', $snack)
-                <form method="POST" action="{{ route('snacks.destroy', $snack->id) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete Snack</button>
-                </form>
-            @endcan
-        @endauth
-
+        <div>
+            @auth
+                @if(Gate::allows('admin') || Gate::allows('delete-snack', $snack))
+                    <form method="POST" action="{{ route('snacks.destroy', $snack->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Snack</button>
+                    </form>
+                @endif
+            @endauth
+        </div>
     </div>
-
 @endsection

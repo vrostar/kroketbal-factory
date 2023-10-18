@@ -8,10 +8,27 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    public function giveAdmin(User $user)
+    {
+        $user->role = 'admin';
+        $user->save();
+        session()->flash('alert', 'User successfully made administrator.');
+
+        return redirect(route('users.index'));
+    }
+
+    public function removeAdmin(User $user)
+    {
+        $user->role = 'user';
+        $user->save();
+        session()->flash('alert', 'Removed admin status.');
+
+        return redirect(route('users.index'));
+    }
 
     public function index(){
         $users = User::all();
-        return view('users')->with('users', $users);
+        return view('users.index')->with('users', $users);
     }
     public function edit()
     {
