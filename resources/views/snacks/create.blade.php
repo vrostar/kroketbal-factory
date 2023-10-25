@@ -18,6 +18,11 @@
                 <label for="description">Description:</label>
                 <textarea class="form-control" id="description" name="description" required></textarea>
             </div>
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <p>(eg. Healthy, Meaty, Crispy, Bars etc.)</p>
+                <input type="text" class="form-control" id="type" name="type" required>
+            </div>
             <button type="submit" class="btn btn-primary">Create Snack</button>
         </form>
     </div>

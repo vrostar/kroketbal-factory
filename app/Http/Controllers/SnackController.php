@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Snack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,7 @@ class SnackController extends Controller
             'name' => 'required|string',
             'ingredients' => 'required|string',
             'description' => 'required|string',
+            'type' => 'required|string',
         ]);
 
         // Get the currently authenticated user
@@ -30,12 +32,23 @@ class SnackController extends Controller
         return redirect()->route('snacks.create')->with('success', 'Snack created successfully!');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $snacks = Snack::with('user')->get(); // Load user relationship
+        $search = $request->input('search');
 
-        return view('snacks.index', ['snacks' => $snacks]);
+        // Retrieve snacks and eager load the 'user' relationship
+        $snacks = Snack::with('user')
+            ->when($search, function ($query) use ($search) {
+                // Apply search filter if a search query is provided
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%')
+                    ->orWhere('type', 'like', '%' . $search . '%');
+            })
+            ->get();
+
+        return view('snacks.index', ['snacks' => $snacks, 'search' => $search]);
     }
+
 
     public function edit(Snack $snack)
     {
@@ -52,7 +65,7 @@ class SnackController extends Controller
         $this->authorize('update-snack', $snack);
 
         // Validate and update the snack data
-        $snack->update($request->only(['name', 'ingredients', 'description']));
+        $snack->update($request->only(['name', 'ingredients', 'description', 'type']));
 
         return redirect()->route('snacks.show', $snack)->with('success', 'Snack updated successfully!');
     }

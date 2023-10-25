@@ -6,6 +6,7 @@
         <h3>Snack Name: {{ $snack->name }}</h3>
         <p>Ingredients: {{ $snack->ingredients }}</p>
         <p>Description: {{ $snack->description }}</p>
+        <p>Type: {{ $snack->type }}</p>
         <p>Uploaded By: {{ $snack->user->name }}</p>
 
         <div class="mb-4">

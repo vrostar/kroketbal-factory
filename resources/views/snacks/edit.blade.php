@@ -23,6 +23,12 @@
                 <textarea name="description" id="description" class="form-control">{{ $snack->description }}</textarea>
             </div>
 
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <p>(eg. Healthy, Meaty, Crispy, Bars etc.)</p>
+                <input type="text" name="type" id="type" class="form-control" value="{{ $snack->type }}">
+            </div>
+
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
     </div>

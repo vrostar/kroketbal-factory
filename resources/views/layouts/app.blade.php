@@ -34,6 +34,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('snacks.index') }}">Snacks</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('users.index') }}">Users</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

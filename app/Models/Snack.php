@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Snack extends Model
 {
-    protected $fillable = ['name', 'ingredients', 'description', 'user_id'];
+    protected $fillable = ['name', 'ingredients', 'description', 'user_id', 'type'];
 
     // Define the relationship to the User model
     public function user()
