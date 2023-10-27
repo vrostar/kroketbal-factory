@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-warning">
+            {{ session('success') }}
+        </div>
+    @elseif(session('error'))
+        <div class="alert alert-warning">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="container">
         <h2>Snack Details</h2>
         <h3>Snack Name: {{ $snack->name }}</h3>

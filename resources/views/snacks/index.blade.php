@@ -1,19 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
+    @if(session('warning'))
+        <div class="alert alert-warning">
+            {{ session('warning') }}
+        </div>
+    @elseif(session('success'))
+        <div class="alert alert-warning">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="container">
-        <h2>List of Snacks</h2>
-        <form method="GET" action="{{ route('snacks.index') }}" class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" name="search" placeholder="Search" aria-label="Search"
-                   value="{{ $search }}">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <h2>List of
+            <a href="{{ url('/snacks') }}">Snacks</a>
+        </h2>
+        <form action="{{ route('snacks.index') }}" method="GET">
+            <div class="input-group">
+                <input class="form-control form-control-sm" type="search" name="search" placeholder="Search..." aria-label="Search" value="{{ $search }}">
+                    <select name="type" class="form-control form-control-sm">
+                        <option value="">All Types</option>
+                        <option value="Healthy">Healthy</option>
+                        <option value="Meaty">Meaty</option>
+                        <option value="Crispy">Crispy</option>
+                        <option value="Cheesy">Cheesy</option>
+                    </select>
+                <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit">Search</button>
+            </div>
         </form>
-        <table class="table">
 
+        <div>
             @auth
-                <a href="{{ route('snacks.create') }}" class="btn btn-success">Create Snack</a>
+                    <a href="{{ route('snacks.create') }}" class="btn btn-success btn-sm" title="Create Snack">Create Snack</a>
             @endauth
+        </div>
 
+        <table class="table mt-3">
             <thead>
             <tr>
                 <th>Snack Name</th>

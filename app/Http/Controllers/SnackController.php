@@ -29,12 +29,13 @@ class SnackController extends Controller
         // Create a new snack and associate it with the user
         $user->snacks()->create($data);
 
-        return redirect()->route('snacks.create')->with('success', 'Snack created successfully!');
+        return redirect()->route('snacks.index')->with('success', 'Snack created successfully!');
     }
 
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $type = $request->input('type');
 
         // Retrieve snacks and eager load the 'user' relationship
         $snacks = Snack::with('user')
@@ -43,6 +44,9 @@ class SnackController extends Controller
                 $query->where('name', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%')
                     ->orWhere('type', 'like', '%' . $search . '%');
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->where('type', $type);
             })
             ->get();
 
