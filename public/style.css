@@ -1,0 +1,9 @@
+/* Adjust the width of the select element */
+.custom-select {
+    width: 100px; /* Adjust the width as needed */
+}
+
+/* Adjust the font size of the select options */
+.custom-select option {
+    font-size: 14px; /* Adjust the font size as needed */
+}

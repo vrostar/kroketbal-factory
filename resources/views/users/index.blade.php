@@ -3,14 +3,14 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="mb-4 col-6">
-                {{--Show message if user is successfully made admin.--}}
+                {{--Show message at top of page to indicate turning user into admin was success--}}
                 @if (session('alert'))
                     <div class="alert alert-success" role="alert">
                         {{ session('alert') }}
                     </div>
                 @endif
-                <h2>Admin - Users</h2>
-                <p>List of registered users.</p>
+                <h2>Users</h2>
+                <p>List of Users, give users admin status by pressing the button</p>
                 <table class="table table-responsive table-hover">
                     <thead>
                     <tr>
@@ -18,7 +18,6 @@
                         <th>Name</th>
                         <th>E-mail</th>
                         <th>Admin?</th>
-                        <th>Verified</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -35,8 +34,9 @@
                             </td>
                             <td>
                                 @auth
+                                    {{--Check if user is admin,
+                                    if they are allow them to turn users into admin--}}
                                     @if(!$user->isAdmin())
-                                        {{--Make user admin button for non admin-users--}}
                                         <form action="{{ route('users.give-admin', $user->id) }}" method="POST">
                                             @csrf
                                             <button type="submit" class="btn btn-success btn-sm">Make Admin</button>

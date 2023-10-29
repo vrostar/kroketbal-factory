@@ -16,11 +16,13 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Check if user is authenticated and has role admin
         if (Auth()->user() && Auth()->user()->role === 'admin') {
             return $next($request);
         }
 
-        return redirect('home'); // Redirect unauthorized users to the home page
+        // Redirect regular users to the home page
+        return redirect('home');
 
     }
 }

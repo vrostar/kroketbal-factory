@@ -17,11 +17,14 @@ class CreateSnackMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user(); // Get the authenticated user
-        $viewedSnacks = $user->snackViews->count(); // Assuming you have a relationship to snackViews
+        // Get the authenticated user
+        $user = $request->user();
+        // Connect with snackViews to get user's viewed snack count
+        $viewedSnacks = $user->snackViews->count();
 
+        // If user has viewed 4 snacks or more, allow access.
         if ($viewedSnacks >= 4) {
-            return $next($request); // User has viewed at least 4 snacks, allow access.
+            return $next($request);
         }
 
         return redirect()->route('snacks.index')

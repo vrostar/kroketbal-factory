@@ -42,16 +42,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Define the snacks relationship
+    // Define the snacks relationship so users can edit their own snacks
     public function snacks()
     {
         return $this->hasMany(Snack::class);
     }
 
+    // Checks if user role is admin
     public function isAdmin(){
         return $this->role === 'admin';
     }
 
+    // Make relation to snackView model indicating user can have many snack views
     public function snackViews()
     {
         return $this->hasMany(SnackView::class);

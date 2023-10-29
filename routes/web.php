@@ -30,7 +30,7 @@ Route::put('/snacks/{snack}', [SnackController::class, 'update'])->name('snacks.
 Route::delete('/snacks/{snack}', [SnackController::class, 'destroy'])->name('snacks.destroy')->middleware('auth');
 Route::get('/snacks/{snack}', [SnackController::class, 'show'])
     ->name('snacks.show')
-    ->middleware('viewedSnacks');
+    ->middleware('auth', 'viewedSnacks');
 
 
 

@@ -24,14 +24,17 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // Gate: checks if the user had admin role
         Gate::define('admin', function ($user) {
             return $user->role === 'admin';
         });
 
+        // Gate: checks if the user can update the snack
         Gate::define('update-snack', function ($user, $snack) {
             return $user->id === $snack->user_id;
         });
 
+        // Gate: checks if the user can delete the snack
         Gate::define('delete-snack', function ($user, $snack) {
             return $user->id === $snack->user_id;
         });

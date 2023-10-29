@@ -16,31 +16,33 @@ class SnackController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
+        // Validate the snack data
+        $validatedData = $request->validate([
             'name' => 'required|string',
             'ingredients' => 'required|string',
             'description' => 'required|string',
             'type' => 'required|string',
         ]);
 
-        // Get the currently authenticated user
-        $user = Auth::user();
+        $user = auth()->user();
 
-        // Create a new snack and associate it with the user
-        $user->snacks()->create($data);
+        // Create new snack and link it to the user
+        $user->snacks()->create($validatedData);
 
         return redirect()->route('snacks.index')->with('success', 'Snack created successfully!');
     }
 
+
     public function index(Request $request)
     {
+        // Input for search
         $search = $request->input('search');
+        // Input for filtering by type
         $type = $request->input('type');
-
-        // Retrieve snacks and eager load the 'user' relationship
+        // Retrieve snacks and their relationship with the user that made it
         $snacks = Snack::with('user')
             ->when($search, function ($query) use ($search) {
-                // Apply search filter if a search query is provided
+                // Search by search input when query is provided
                 $query->where('name', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%')
                     ->orWhere('type', 'like', '%' . $search . '%');
@@ -56,9 +58,9 @@ class SnackController extends Controller
 
     public function edit(Snack $snack)
     {
-        // Ensure that the currently authenticated user is authorized to edit the snack
+        // Check if current user has made snack, if so allow them to edit
         if (auth()->user()->id !== $snack->user_id) {
-            abort(403); // Display a "Forbidden" error if the user is not authorized
+            abort(403); // Display "Forbidden" error if the user did not create the snack
         }
 
         return view('snacks.edit', ['snack' => $snack]);
@@ -66,9 +68,10 @@ class SnackController extends Controller
 
     public function update(Request $request, Snack $snack)
     {
+        // Use update-snack gate to check if user ID matched snack ID
         $this->authorize('update-snack', $snack);
 
-        // Validate and update the snack data
+        // Once authorized allow user to edit snack
         $snack->update($request->only(['name', 'ingredients', 'description', 'type']));
 
         return redirect()->route('snacks.show', $snack)->with('success', 'Snack updated successfully!');
@@ -76,8 +79,8 @@ class SnackController extends Controller
 
     public function destroy(Snack $snack)
     {
+        // Only allow admins or snack owners to delete the current post
         if (Gate::allows('admin') || $snack->user_id === auth()->id()) {
-            // Allow admins or the snack's owner to delete the post
             $snack->delete();
             return redirect()->route('snacks.index')->with('success', 'Snack deleted successfully');
         } else {
